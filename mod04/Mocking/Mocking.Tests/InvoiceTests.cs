@@ -58,9 +58,16 @@ namespace Mocking.Tests
             //Arrange
             MockRepository mocks = new MockRepository();
 
-            ICreditCard card = mocks.Stub<ICreditCard>();
+            //ICreditCard card = mocks.Stub<ICreditCard>();
+            ICreditCard card = MockRepository.GenerateStub<ICreditCard>();
             card.Number = "377777777777777";
-            
+            card.Name = "Gary";
+            card.ExpirationMonth = "11";
+            card.ExpirationYear = "20";
+            //A property that only has a getter must be set 
+            // through and Expect statement
+            card.Expect(c => c.ExpirationDate).Return("11/20");
+
             ICreditCardProcessor stub = MockRepository.GenerateStub<ICreditCardProcessor>();
             stub.Expect(s => s.ChargePayment(card, 150)).Return("**555555**").Repeat.Any();
             //stub.Expect(s => s.ChargePayment(card, 150)).Return("**555555**").Repeat.Any();
@@ -72,6 +79,7 @@ namespace Mocking.Tests
 
             //Assert
             Assert.AreEqual("**555555**", code);
+            Assert.AreEqual("11/20", card.ExpirationDate);
         }
 
 
@@ -88,7 +96,7 @@ namespace Mocking.Tests
             mock.Expect(s => s.ChargePayment(card, 150))
                 .Return("**555555**")
                 .Repeat
-                .Twice();
+                .Times(5);
             
             Invoice invoice = new Invoice(mock);
 

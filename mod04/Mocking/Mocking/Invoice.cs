@@ -8,14 +8,17 @@ namespace Mocking
     public class Invoice
     {
         private ICreditCardProcessor processor;
+        
 
         public Invoice()
         {
-            processor = new CreditCardProcessor();
+            // use the factory pattern to create a default processor
+            processor = CreditCardProcessorFactory.Processor;
         }
 
         public Invoice(ICreditCardProcessor processor)
         {
+            // allow for processor injection
             this.processor = processor;
         }
 
