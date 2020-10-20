@@ -7,10 +7,20 @@ namespace Mocking
 {
     public class Invoice
     {
+        private ICreditCardProcessor processor;
+
+        public Invoice()
+        {
+            processor = new CreditCardProcessor();
+        }
+
+        public Invoice(ICreditCardProcessor processor)
+        {
+            this.processor = processor;
+        }
+
         public string ChargeCard(decimal amount, ICreditCard card)
         {
-            CreditCardProcessor processor = new CreditCardProcessor();
-
             var authorization = processor.ChargePayment(card, amount);
 
             return authorization;
