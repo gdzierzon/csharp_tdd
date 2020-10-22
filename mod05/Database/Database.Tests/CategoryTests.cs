@@ -31,7 +31,6 @@ namespace Database.Tests
         {
             transaction.Rollback();
             connection.Close();
-
         }
         
 
@@ -50,11 +49,16 @@ namespace Database.Tests
             var reader = selectCommand.ExecuteReader();
 
             // Assert
-
             int counter = 0;
+            Category category = null;
             while (reader.Read())
             {
                 counter++;
+                category = new Category();
+                category.Id = reader.GetInt32(0);
+                category.Name = reader.GetString(1);
+                category.Description = reader.GetString(2);
+
                 Console.WriteLine(reader.GetInt32(0));
                 Console.WriteLine(reader.GetString(1));
                 Assert.That(reader.GetString(1), Is.EqualTo("New Category"));
@@ -62,8 +66,6 @@ namespace Database.Tests
             Assert.AreEqual(1, counter);
 
             reader.Close();
-            
-
 
         }
     }
